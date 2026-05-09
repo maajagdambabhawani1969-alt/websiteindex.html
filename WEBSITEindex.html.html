@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SHI-SHA Tech – AI Trading Tools | India</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#020810;--navy:#050e1f;--blue:#0a1628;
+  --neon:#00f0ff;--neon2:#7b2fff;--neon3:#00ff88;
+  --india:#ff9933;--india2:#138808;
+  --glass:rgba(0,240,255,0.05);--glass2:rgba(255,255,255,0.03);
+  --border:rgba(0,240,255,0.15);--text:#e8f4ff;--muted:#7a9bb5;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--neon);border-radius:10px}
+
+/* TICKER */
+.disclaimer-ticker{position:fixed;top:0;left:0;width:100%;z-index:2000;background:linear-gradient(90deg,rgba(255,50,50,.15),rgba(255,100,0,.1),rgba(255,50,50,.15));border-bottom:1px solid rgba(255,80,80,.35);padding:7px 0;overflow:hidden;display:flex;align-items:center}
+.ticker-label{background:linear-gradient(135deg,#ff4444,#ff8800);color:#fff;font-size:.7rem;font-weight:900;letter-spacing:2px;padding:3px 16px;white-space:nowrap;flex-shrink:0;text-transform:uppercase;border-right:1px solid rgba(255,100,0,.4);margin-right:16px}
+.ticker-track{display:flex;gap:0;white-space:nowrap;animation:ticker 45s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-text{font-size:.72rem;color:#ffcccc;letter-spacing:.5px;padding-right:60px}
+.ticker-text strong{color:#ff6666;font-weight:800}
+.ticker-sep{color:rgba(255,100,0,.6);padding-right:60px;font-size:.8rem}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* NAV */
+nav{position:fixed;top:37px;width:100%;z-index:1000;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;background:rgba(2,8,16,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;letter-spacing:1px;transition:.3s;text-transform:uppercase}
+.nav-links a:hover{color:var(--neon);text-shadow:0 0 10px var(--neon)}
+.nav-cta{background:linear-gradient(135deg,var(--neon2),var(--neon));color:#000;padding:8px 20px;border-radius:25px;font-weight:700;font-size:.8rem;text-decoration:none;letter-spacing:1px;transition:.3s}
+.nav-cta:hover{box-shadow:0 0 20px var(--neon);transform:scale(1.05)}
+
+/* HERO */
+#hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:140px 5% 80px}
+#tradingCanvas{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.35}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(0,240,255,.12) 0%,rgba(123,47,255,.08) 40%,transparent 70%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,240,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,.04) 1px,transparent 1px);background-size:50px 50px}
+.hero-content{position:relative;z-index:2;max-width:860px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--border);padding:7px 18px;border-radius:30px;font-size:.78rem;color:var(--neon);letter-spacing:2px;margin-bottom:18px}
+.badge-dot{width:8px;height:8px;background:var(--neon3);border-radius:50%;animation:pulse 1.5s infinite}
+.india-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,153,51,.08);border:1px solid rgba(255,153,51,.3);padding:6px 16px;border-radius:30px;font-size:.74rem;color:var(--india);letter-spacing:2px;margin-bottom:20px;margin-left:10px}
+h1{font-size:clamp(2rem,5vw,3.8rem);font-weight:900;line-height:1.15;margin-bottom:20px;letter-spacing:-1px}
+h1 .grad{background:linear-gradient(135deg,var(--neon),var(--neon2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h1 .grad-india{background:linear-gradient(135deg,var(--india),var(--india2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:clamp(.92rem,2vw,1.1rem);color:var(--muted);max-width:620px;margin:0 auto 38px;line-height:1.7}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:linear-gradient(135deg,var(--neon2),var(--neon));color:#000;padding:13px 34px;border-radius:30px;font-weight:800;font-size:.92rem;text-decoration:none;transition:.3s}
+.btn-primary:hover{box-shadow:0 0 30px var(--neon);transform:translateY(-2px)}
+.btn-ghost{border:1px solid var(--border);color:var(--neon);padding:13px 34px;border-radius:30px;font-weight:700;font-size:.92rem;text-decoration:none;transition:.3s;backdrop-filter:blur(10px)}
+.btn-ghost:hover{background:var(--glass);box-shadow:0 0 20px rgba(0,240,255,.2);transform:translateY(-2px)}
+.btn-india{background:linear-gradient(135deg,#ff9933,#138808);color:#fff;padding:13px 28px;border-radius:30px;font-weight:800;font-size:.88rem;text-decoration:none;transition:.3s}
+.btn-india:hover{box-shadow:0 0 25px rgba(255,153,51,.5);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:50px;flex-wrap:wrap}
+.stat-num{font-size:2rem;font-weight:900;color:var(--neon)}
+.stat-lbl{font-size:.73rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.no-profit-banner{background:linear-gradient(135deg,rgba(255,60,60,.1),rgba(255,120,0,.08));border:1px solid rgba(255,80,80,.3);border-radius:16px;padding:20px 26px;margin-top:38px;text-align:left;position:relative;z-index:2}
+.warn-icon{font-size:2rem;flex-shrink:0;margin-top:2px}
+.warn-title{font-size:.85rem;font-weight:900;color:#ff7777;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.warn-text{font-size:.8rem;color:rgba(255,180,180,.75);line-height:1.7}
+.warn-text strong{color:#ff9999}
+
+/* SEBI BANNER */
+.sebi-banner{background:linear-gradient(135deg,rgba(255,153,51,.08),rgba(19,136,8,.06));border:1px solid rgba(255,153,51,.3);border-radius:14px;padding:16px 22px;margin-top:16px;display:flex;gap:14px;align-items:flex-start;text-align:left;position:relative;z-index:2}
+.sebi-icon{font-size:1.6rem;flex-shrink:0}
+.sebi-title{font-size:.78rem;font-weight:900;color:var(--india);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.sebi-text{font-size:.77rem;color:rgba(255,200,120,.75);line-height:1.65}
+.sebi-text strong{color:#ffc06e}
+
+section{padding:80px 5%}
+.section-tag{display:inline-block;background:var(--glass);border:1px solid var(--border);padding:5px 16px;border-radius:20px;font-size:.72rem;color:var(--neon);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.section-tag.india-tag{background:rgba(255,153,51,.08);border-color:rgba(255,153,51,.3);color:var(--india)}
+.section-title{font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:800;margin-bottom:14px;line-height:1.2}
+.section-sub{color:var(--muted);font-size:.93rem;line-height:1.7;max-width:580px}
+.section-title .g{background:linear-gradient(135deg,var(--neon),var(--neon2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-title .gi{background:linear-gradient(135deg,#ff9933,#138808);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ABOUT */
+#about{background:linear-gradient(180deg,var(--bg) 0%,var(--navy) 100%)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:50px}
+.about-img-inner{background:var(--blue);padding:30px;border-radius:20px;border:1px solid var(--border)}
+.about-points{display:flex;flex-direction:column;gap:18px;margin-top:28px}
+.point{display:flex;gap:14px;align-items:flex-start}
+.point-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:var(--glass);border:1px solid var(--border)}
+.point h4{font-size:.9rem;font-weight:700;margin-bottom:4px}
+.point p{font-size:.82rem;color:var(--muted);line-height:1.6}
+
+/* TOOLS */
+#tools{background:var(--navy)}
+.tools-tabs{display:flex;gap:10px;justify-content:center;margin:30px 0 40px;flex-wrap:wrap}
+.tab-btn{background:var(--glass2);border:1px solid var(--border);color:var(--muted);padding:9px 20px;border-radius:25px;font-size:.76rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.tab-btn.active,.tab-btn:hover{background:linear-gradient(135deg,rgba(0,240,255,.15),rgba(123,47,255,.1));border-color:var(--neon);color:var(--neon);box-shadow:0 0 15px rgba(0,240,255,.15)}
+.tab-btn.india-tab.active,.tab-btn.india-tab:hover{background:linear-gradient(135deg,rgba(255,153,51,.15),rgba(19,136,8,.1));border-color:var(--india);color:var(--india);box-shadow:0 0 15px rgba(255,153,51,.2)}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.tool-card{background:var(--glass2);border:1px solid var(--border);border-radius:20px;padding:28px 24px;position:relative;overflow:hidden;transition:.4s;cursor:default}
+.tool-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,240,255,.08),transparent 60%);opacity:0;transition:.4s}
+.tool-card:hover{transform:translateY(-8px);border-color:var(--neon);box-shadow:0 0 40px rgba(0,240,255,.15),0 20px 60px rgba(0,0,0,.5)}
+.tool-card:hover::before{opacity:1}
+.tool-card.india-card{border-color:rgba(255,153,51,.2)}
+.tool-card.india-card:hover{border-color:var(--india);box-shadow:0 0 40px rgba(255,153,51,.2),0 20px 60px rgba(0,0,0,.5)}
+.tool-badge{font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--neon);background:var(--glass);border:1px solid var(--border);padding:4px 12px;border-radius:15px;display:inline-block;margin-bottom:16px}
+.tool-badge.strategy{color:#ffb400;border-color:rgba(255,180,0,.35);background:rgba(255,180,0,.08)}
+.tool-badge.india-badge-tag{color:var(--india);border-color:rgba(255,153,51,.35);background:rgba(255,153,51,.08)}
+.tool-badge.new-india{color:#00ff88;border-color:rgba(0,255,136,.35);background:rgba(0,255,136,.08)}
+.tool-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;background:linear-gradient(135deg,rgba(0,240,255,.15),rgba(123,47,255,.15));border:1px solid var(--border)}
+.tool-icon.india-icon{background:linear-gradient(135deg,rgba(255,153,51,.18),rgba(19,136,8,.12));border-color:rgba(255,153,51,.25)}
+.tool-card h3{font-size:1.05rem;font-weight:800;margin-bottom:10px;line-height:1.3}
+.tool-card .desc{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.tool-tf{font-size:.8rem;color:var(--neon3);font-weight:700;margin-bottom:14px}
+.tool-tf.india-tf{color:var(--india)}
+.tool-features{list-style:none;display:flex;flex-direction:column;gap:8px}
+.tool-features li{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:8px}
+.tool-features li::before{content:'✦';color:var(--neon);font-size:.6rem}
+.tool-features.india-features li::before{color:var(--india)}
+.card-glow{position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;filter:blur(40px);opacity:.3}
+.card1 .card-glow{background:var(--neon)}.card2 .card-glow{background:var(--neon2)}.card3 .card-glow{background:var(--neon3)}
+.card4 .card-glow{background:#ffb400}.card5 .card-glow{background:#b57bff}.card6 .card-glow{background:#ff7777}.card7 .card-glow{background:#00e5ff}
+.card-nifty .card-glow{background:#ff9933}.card-bnk .card-glow{background:#138808}.card-crude .card-glow{background:#8b4513}.card-goldind .card-glow{background:#ffd700}
+.strategy-sep{grid-column:1/-1;display:flex;align-items:center;gap:16px;margin:8px 0}
+.strategy-sep span{white-space:nowrap;font-size:.74rem;color:var(--neon);letter-spacing:3px;text-transform:uppercase;font-weight:700}
+.strategy-sep.india-sep span{color:var(--india)}
+.strategy-sep::before,.strategy-sep::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.strat-detail{background:linear-gradient(135deg,rgba(255,180,0,.06),rgba(123,47,255,.06));border:1px solid rgba(255,180,0,.2);border-radius:14px;padding:18px;margin-top:13px}
+.strat-detail.india-detail{background:linear-gradient(135deg,rgba(255,153,51,.07),rgba(19,136,8,.05));border-color:rgba(255,153,51,.25)}
+.strat-detail h5{font-size:.73rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#ffb400;margin-bottom:10px}
+.strat-detail.india-detail h5{color:var(--india)}
+.strat-rule{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:.78rem;color:var(--muted);line-height:1.5}
+.strat-rule span:first-child{flex-shrink:0;background:rgba(255,180,0,.15);border:1px solid rgba(255,180,0,.25);color:#ffb400;font-weight:800;font-size:.7rem;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.strat-rule.india-rule span:first-child{background:rgba(255,153,51,.15);border-color:rgba(255,153,51,.3);color:var(--india)}
+
+/* NOTE BOX */
+.tool-important-note{margin-top:16px;background:linear-gradient(135deg,rgba(255,210,0,.09),rgba(255,160,0,.06));border:1.5px solid rgba(255,200,0,.45);border-radius:12px;padding:11px 13px;display:flex;gap:10px;align-items:flex-start;font-size:.76rem;color:rgba(255,230,150,.9);line-height:1.65}
+.note-icon{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:rgba(255,200,0,.18);border:1.5px solid rgba(255,200,0,.45);color:#ffd700;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;margin-top:1px}
+.note-highlight{background:rgba(255,210,0,.18);border:1px solid rgba(255,210,0,.45);color:#ffe033;font-weight:900;padding:1px 7px;border-radius:6px;font-size:.72rem;white-space:nowrap}
+.tool-important-note strong{color:#ffd700;font-weight:900;letter-spacing:.5px}
+
+/* SEBI NOTE for India tools */
+.sebi-tool-note{margin-top:14px;background:linear-gradient(135deg,rgba(255,153,51,.09),rgba(19,136,8,.06));border:1.5px solid rgba(255,153,51,.4);border-radius:12px;padding:11px 13px;font-size:.75rem;color:rgba(255,210,150,.9);line-height:1.65}
+.sebi-tool-note strong{color:var(--india);font-weight:900}
+
+/* TAGS */
+.strategy-tag{font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px}
+.st-gold{background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.3);color:#ffb400}
+.st-purple{background:rgba(123,47,255,.12);border:1px solid rgba(123,47,255,.3);color:#b57bff}
+.st-red{background:rgba(255,80,80,.12);border:1px solid rgba(255,80,80,.3);color:#ff7777}
+.st-cyan{background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);color:#00e5ff}
+.st-orange{background:rgba(255,153,51,.12);border:1px solid rgba(255,153,51,.3);color:#ff9933}
+.st-green{background:rgba(19,136,8,.15);border:1px solid rgba(19,136,8,.4);color:#3ddc34}
+.st-brown{background:rgba(139,69,19,.18);border:1px solid rgba(180,100,40,.35);color:#e8a060}
+.st-yellow{background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.35);color:#ffd700}
+
+/* FEATURES */
+#features{background:var(--bg)}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:46px}
+.feat-card{background:var(--glass2);border:1px solid var(--border);border-radius:16px;padding:24px;transition:.3s}
+.feat-card:hover{border-color:rgba(0,240,255,.4);transform:translateY(-4px);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.feat-icon{font-size:1.7rem;margin-bottom:12px}
+.feat-card h4{font-size:.9rem;font-weight:700;margin-bottom:8px}
+.feat-card p{font-size:.8rem;color:var(--muted);line-height:1.6}
+
+/* LIVE */
+#live{position:relative;background:var(--navy);overflow:hidden}
+#liveCanvas{position:absolute;inset:0;width:100%;height:100%;opacity:.2}
+.live-inner{position:relative;z-index:2;max-width:900px;margin:0 auto;text-align:center}
+.live-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.3);padding:8px 20px;border-radius:30px;font-size:.78rem;color:#ff5555;letter-spacing:2px;margin-bottom:30px;text-transform:uppercase}
+.live-dot{width:8px;height:8px;background:#ff5555;border-radius:50%;animation:pulse 1s infinite}
+.signals-feed{background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:34px;text-align:left;backdrop-filter:blur(20px)}
+.feed-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.feed-row{display:grid;grid-template-columns:90px 1fr 65px 60px 80px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.82rem;animation:fadeIn .4s ease}
+.signal-buy{color:#00ff88;font-weight:800;font-size:.8rem}
+.signal-sell{color:#ff4466;font-weight:800;font-size:.8rem}
+.signal-time{color:var(--muted)}.signal-asset{font-weight:700}.signal-acc{color:var(--neon)}
+.feed-disclaimer{margin-top:12px;font-size:.71rem;color:rgba(122,155,181,.5);text-align:center;font-style:italic}
+
+/* PLATFORMS */
+#platforms{background:linear-gradient(180deg,var(--bg) 0%,var(--navy) 100%)}
+.platform-section{margin-top:50px}
+.platform-section-title{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.platform-section-title h3{font-size:1.1rem;font-weight:800;letter-spacing:1px}
+.platform-section-title.india-title h3{color:var(--india)}
+.platform-section-title.global-title h3{color:var(--neon)}
+.platforms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.platform-card{background:var(--glass2);border:1px solid var(--border);border-radius:18px;padding:22px;transition:.3s;position:relative;overflow:hidden}
+.platform-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,.5)}
+.platform-card.india-platform{border-color:rgba(255,153,51,.2)}
+.platform-card.india-platform:hover{border-color:var(--india);box-shadow:0 15px 40px rgba(255,153,51,.1)}
+.platform-card.global-platform:hover{border-color:var(--neon);box-shadow:0 15px 40px rgba(0,240,255,.1)}
+.platform-rank{position:absolute;top:14px;right:14px;font-size:.65rem;font-weight:900;letter-spacing:1px;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.rank-india{background:rgba(255,153,51,.15);border:1px solid rgba(255,153,51,.3);color:var(--india)}
+.rank-global{background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.25);color:var(--neon)}
+.platform-icon{font-size:1.5rem;margin-bottom:10px}
+.platform-card h4{font-size:1rem;font-weight:800;margin-bottom:6px}
+.platform-card .pdesc{font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.ptag{font-size:.69rem;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin:3px 3px 3px 0}
+.ptag-green{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.25);color:#00ff88}
+.ptag-orange{background:rgba(255,153,51,.1);border:1px solid rgba(255,153,51,.25);color:#ff9933}
+.ptag-blue{background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.2);color:var(--neon)}
+.ptag-purple{background:rgba(123,47,255,.12);border:1px solid rgba(123,47,255,.3);color:#b57bff}
+.ptag-yellow{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.25);color:#ffd700}
+.ptag-grey{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted)}
+.platform-warning{margin-top:28px;background:rgba(255,153,51,.06);border:1px solid rgba(255,153,51,.2);border-radius:14px;padding:16px 20px;font-size:.78rem;color:rgba(255,200,130,.8);line-height:1.7}
+.platform-warning strong{color:var(--india)}
+
+/* CONTACT */
+#contact{background:var(--bg)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:50px;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:16px}
+.contact-card{background:var(--glass2);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;gap:16px;align-items:center;transition:.3s}
+.contact-card:hover{border-color:var(--neon);box-shadow:0 0 20px rgba(0,240,255,.1)}
+.contact-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;background:linear-gradient(135deg,rgba(0,240,255,.15),rgba(123,47,255,.15));border:1px solid var(--border)}
+.contact-card h4{font-size:.8rem;color:var(--muted);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase}
+.contact-card p{font-size:.86rem;font-weight:600}
+.wa-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;padding:12px 24px;border-radius:30px;font-weight:700;font-size:.86rem;text-decoration:none;transition:.3s}
+.wa-btn:hover{box-shadow:0 0 25px rgba(37,211,102,.4);transform:translateY(-2px)}
+.contact-form{background:var(--glass2);border:1px solid var(--border);border-radius:20px;padding:30px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.74rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:10px;font-size:.86rem;outline:none;transition:.3s;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--neon);box-shadow:0 0 15px rgba(0,240,255,.1)}
+.form-group textarea{resize:vertical;min-height:95px}
+.form-submit{width:100%;background:linear-gradient(135deg,var(--neon2),var(--neon));color:#000;padding:13px;border:none;border-radius:30px;font-weight:800;font-size:.92rem;cursor:pointer;transition:.3s}
+.form-submit:hover{box-shadow:0 0 30px var(--neon);transform:translateY(-2px)}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-box{background:var(--navy);border:1px solid var(--border);border-radius:20px;max-width:700px;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,240,255,.1)}
+.modal-head{padding:22px 26px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-head h3{font-size:1.05rem;font-weight:800;letter-spacing:1px}
+.modal-head h3 span{color:var(--neon)}
+.modal-close{background:var(--glass);border:1px solid var(--border);color:var(--muted);width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:.3s}
+.modal-close:hover{color:var(--neon);border-color:var(--neon)}
+.modal-body{padding:26px;overflow-y:auto;flex:1;font-size:.83rem;line-height:1.8;color:rgba(232,244,255,.75)}
+.modal-body h4{color:var(--neon);font-size:.8rem;letter-spacing:2px;text-transform:uppercase;margin:20px 0 9px;font-weight:800}
+.modal-body h4:first-child{margin-top:0}
+.modal-body p{margin-bottom:12px}
+.modal-body ul{padding-left:18px;margin-bottom:12px;display:flex;flex-direction:column;gap:6px}
+.modal-body ul li{color:rgba(232,244,255,.65)}
+.modal-body strong{color:var(--text)}
+.modal-body .warn-box{background:rgba(255,60,60,.08);border:1px solid rgba(255,80,80,.25);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:.81rem;color:#ffbbbb}
+.modal-body .warn-box strong{color:#ff7777}
+
+/* FOOTER */
+footer{background:var(--navy);border-top:1px solid var(--border);padding:44px 5% 26px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:34px}
+.footer-brand h3{font-size:1.2rem;font-weight:800;letter-spacing:2px;margin-bottom:12px}
+footer h4{font-size:.78rem;color:var(--neon);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+footer ul a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:.3s}
+footer ul a:hover{color:var(--neon)}
+.social-links{display:flex;gap:10px;margin-top:14px}
+.social-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;transition:.3s;background:var(--glass2)}
+.social-btn:hover{border-color:var(--neon);box-shadow:0 0 15px rgba(0,240,255,.2);transform:translateY(-2px)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:.75rem;color:var(--muted)}
+.footer-legal-links{display:flex;gap:16px;flex-wrap:wrap}
+.footer-legal-links a{color:var(--muted);text-decoration:none;font-size:.73rem;transition:.3s}
+.footer-legal-links a:hover{color:var(--neon)}
+.footer-disclaimer{background:rgba(255,60,60,.07);border:1px solid rgba(255,80,80,.2);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:.74rem;color:rgba(255,180,180,.7);line-height:1.7}
+.footer-disclaimer strong{color:#ff8888}
+
+/* UPLOAD */
+.upload-box{border:2px dashed var(--border);border-radius:14px;padding:18px;text-align:center;cursor:pointer;transition:.3s;background:rgba(0,0,0,.3)}
+.upload-box:hover{border-color:var(--neon);background:rgba(0,240,255,.04)}
+.upload-box.uploaded{border-color:var(--neon3);background:rgba(0,255,136,.06)}
+.upload-inner p{font-size:.78rem;color:var(--muted);margin-top:5px;margin-bottom:0}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+@media(max-width:960px){.tools-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.tools-grid{grid-template-columns:1fr}.about-grid,.contact-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.feed-row{grid-template-columns:80px 1fr 60px 50px}.feed-row .signal-acc{display:none}.strategy-sep{grid-column:1}.form-row{grid-template-columns:1fr}}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr}.hero-stats{gap:18px}.stat-num{font-size:1.5rem}}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="disclaimer-ticker">
+  <div class="ticker-label">⚠ Disclaimer</div>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track">
+      <span class="ticker-text"><strong>⚠ NO GUARANTEED PROFITS:</strong> Trading Binary Options, Forex, Crypto, Nifty, BankNifty, Crude Oil, Gold &amp; F&amp;O involves substantial risk. Past performance does not guarantee future results.</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-text"><strong>SEBI NOTICE:</strong> SHI-SHA Tech is NOT registered with SEBI as an Investment Advisor. Tools are for educational &amp; informational purposes only. Not SEBI-approved financial advice.</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-text"><strong>RISK WARNING:</strong> You may lose some or all of your invested capital. Only trade with money you can afford to lose. F&amp;O &amp; Intraday trading carries very high risk.</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-text"><strong>AI SIGNALS:</strong> Accuracy percentages are based on historical backtesting only — not a guarantee of live trading results. Market conditions change.</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-text"><strong>REGULATORY NOTICE:</strong> Binary options may be restricted or prohibited in certain jurisdictions including India. Verify your local laws before trading.</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-text"><strong>⚠ NO GUARANTEED PROFITS:</strong> Trading Binary Options, Forex, Crypto, Nifty, BankNifty, Crude Oil, Gold &amp; F&amp;O involves substantial risk. Past performance does not guarantee future results.</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-text"><strong>SEBI NOTICE:</strong> SHI-SHA Tech is NOT registered with SEBI as an Investment Advisor. Tools are for educational &amp; informational purposes only.</span>
+      <span class="ticker-sep">◆</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <svg width="34" height="34" viewBox="0 0 38 38" fill="none">
+      <defs><linearGradient id="lg1" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00f0ff"/><stop offset="100%" stop-color="#7b2fff"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <polygon points="19,2 34,10.5 34,27.5 19,36 4,27.5 4,10.5" fill="url(#lg1)" opacity="0.15" stroke="url(#lg1)" stroke-width="1.2"/>
+      <rect x="10" y="22" width="3.5" height="8" rx="1" fill="url(#lg1)" filter="url(#glow)"/>
+      <rect x="15" y="17" width="3.5" height="13" rx="1" fill="url(#lg1)" filter="url(#glow)"/>
+      <rect x="20" y="12" width="3.5" height="18" rx="1" fill="url(#lg1)" filter="url(#glow)"/>
+      <rect x="25" y="19" width="3.5" height="11" rx="1" fill="url(#lg1)" filter="url(#glow)"/>
+      <polyline points="11.75,21 16.75,16 21.75,11 26.75,18" fill="none" stroke="#00f0ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+      <circle cx="26.75" cy="18" r="1.8" fill="#00f0ff" filter="url(#glow)"/>
+    </svg>
+    <div style="line-height:1">
+      <div style="font-size:1.05rem;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,#00f0ff,#7b2fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SHI-SHA</div>
+      <div style="font-size:.54rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-top:1px">TECH · INDIA</div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#live">Live</a></li>
+    <li><a href="#platforms">Platforms</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <canvas id="tradingCanvas"></canvas>
+  <div class="hero-content">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+      <div class="hero-badge"><span class="badge-dot"></span> AI-Powered Trading Technology</div>
+      <div class="india-badge">🇮🇳 Made for India</div>
+    </div>
+    <h1>AI Trading Tools for<br><span class="grad">Global Markets</span> &amp; <span class="grad-india">Indian Markets</span></h1>
+    <p class="hero-sub">Binary · Forex · Crypto · Gold · <strong style="color:var(--india)">Nifty · BankNifty · Crude Oil · MCX Gold</strong><br>11 Premium Tools. Smarter Decisions. Zero Profit Guarantees.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Get Started →</a>
+      <a href="#tools" class="btn-ghost">View All 11 Tools</a>
+      <a href="#platforms" class="btn-india">🇮🇳 Indian Platforms</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">94%</div><div class="stat-lbl">Backtest Accuracy*</div></div>
+      <div class="stat"><div class="stat-num">10K+</div><div class="stat-lbl">Active Traders</div></div>
+      <div class="stat"><div class="stat-num">11</div><div class="stat-lbl">Premium Tools</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-lbl">Live Signals</div></div>
+    </div>
+    <div class="no-profit-banner" style="margin-top:28px">
+      <div style="display:flex;gap:16px;align-items:flex-start">
+        <div class="warn-icon">⚠️</div>
+        <div><div class="warn-title">⛔ No Guaranteed Profits — High Risk Warning</div>
+        <p class="warn-text">Trading involves <strong>significant financial risk</strong>. SHI-SHA Tech tools are for informational assistance only — <strong>no profits are guaranteed</strong>. *Accuracy figures are from historical backtesting. Live market results vary widely. <strong>Never invest more than you can afford to lose.</strong> This is not financial advice.</p></div>
+      </div>
+    </div>
+    <div class="sebi-banner">
+      <div class="sebi-icon">🇮🇳</div>
+      <div>
+        <div class="sebi-title">SEBI Regulatory Notice — Indian Market Users</div>
+        <p class="sebi-text">SHI-SHA Tech is <strong>NOT registered with SEBI</strong> as an Investment Advisor or Research Analyst. Nifty, BankNifty, Crude Oil and MCX Gold tools are for <strong>educational &amp; technical analysis purposes only</strong>. They do not constitute SEBI-regulated investment advice. Intraday &amp; F&amp;O trading is extremely risky — <strong>most retail traders lose money in F&amp;O</strong>. Always consult a SEBI-registered advisor before investing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <div class="section-tag">About Us</div>
+      <h2 class="section-title">Next-Gen <span class="g">AI Innovation</span><br>Now Covering <span class="gi">Indian Markets</span></h2>
+      <p class="section-sub">SHI-SHA Tech delivers state-of-the-art AI tools for traders worldwide and now powers India-specific tools for Nifty 50, BankNifty, Crude Oil (MCX), and Gold (MCX) — purpose-built for NSE/BSE/MCX market conditions.</p>
+      <div class="about-points">
+        <div class="point"><div class="point-icon">⚡</div><div><h4>Ultra-Fast Signal Processing</h4><p>Real-time AI analysis with millisecond response across global &amp; Indian markets.</p></div></div>
+        <div class="point"><div class="point-icon">🇮🇳</div><div><h4>India-Specific Market Intelligence</h4><p>Nifty &amp; BankNifty tools calibrated for NSE session timings, FII/DII flows, and MCX patterns.</p></div></div>
+        <div class="point"><div class="point-icon">🛡️</div><div><h4>Reliable &amp; Responsible</h4><p>Enterprise-grade infrastructure — always with full risk disclaimers. No profit guarantees.</p></div></div>
+      </div>
+    </div>
+    <div style="animation:float 4s ease-in-out infinite">
+      <div class="about-img-inner"><canvas id="aboutChart" width="400" height="200"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div style="text-align:center">
+    <div class="section-tag">Our Tools</div>
+    <h2 class="section-title">11 <span class="g">Premium Tools</span> —<br>Global + <span class="gi">Indian Markets</span></h2>
+    <p class="section-sub" style="margin:0 auto">7 global tools (AI + strategies) + 4 exclusive Indian market indicators. No profits guaranteed.</p>
+  </div>
+  <div class="tools-tabs">
+    <button class="tab-btn active" onclick="showTab('all',this)">All 11 Tools</button>
+    <button class="tab-btn" onclick="showTab('ai',this)">🤖 AI Tools</button>
+    <button class="tab-btn" onclick="showTab('strategy',this)">📐 Global Strategies</button>
+    <button class="tab-btn india-tab" onclick="showTab('india',this)">🇮🇳 Indian Market</button>
+  </div>
+
+  <div class="tools-grid" id="toolsGrid">
+
+    <!-- AI TOOL 1 -->
+    <div class="tool-card card1" data-cat="ai"><div class="card-glow"></div>
+      <span class="tool-badge">Most Popular</span>
+      <div class="tool-icon">🤖</div>
+      <h3>AI Market Analyzer</h3>
+      <p class="desc">Deep learning model delivering precise buy/sell signals across all major markets. ~94% historical accuracy — live results vary.</p>
+      <div class="tool-tf">⏱ Timeframe: 1 Minute</div>
+      <ul class="tool-features"><li>Real-time buy/sell alerts</li><li>Deep learning market analysis</li><li>Automated chart pattern detection</li><li>Multi-asset &amp; multi-timeframe</li></ul>
+      <div class="tool-important-note"><span class="note-icon">⚡</span><div><strong>⚠ VERY IMPORTANT:</strong> Only take a real trade when <span class="note-highlight">Payout ≥ 90%</span> AND <span class="note-highlight">Signal Strength ≥ 75%</span>. Trading below these thresholds significantly increases risk of loss.</div></div>
+    </div>
+
+    <!-- AI TOOL 2 -->
+    <div class="tool-card card2" data-cat="ai"><div class="card-glow"></div>
+      <span class="tool-badge">Beginner Friendly</span>
+      <div class="tool-icon">🛡️</div>
+      <h3>Smart Risk Engine</h3>
+      <p class="desc">Dynamically calculates risk per trade to protect your account balance. Does not guarantee profit or prevent losses.</p>
+      <div class="tool-tf">⏱ Timeframe: 5 Minutes</div>
+      <ul class="tool-features"><li>Dynamic risk calculation</li><li>Structured trade planning</li><li>Capital protection system</li><li>Position sizing guidance</li></ul>
+      <div class="tool-important-note"><span class="note-icon">⚡</span><div><strong>⚠ VERY IMPORTANT:</strong> Only take a real trade when <span class="note-highlight">Payout ≥ 90%</span> AND <span class="note-highlight">Signal Strength ≥ 75%</span>.</div></div>
+    </div>
+
+    <!-- AI TOOL 3 -->
+    <div class="tool-card card3" data-cat="ai"><div class="card-glow"></div>
+      <span class="tool-badge">Pro Level</span>
+      <div class="tool-icon">🧬</div>
+      <h3>Capital Protection AI</h3>
+      <p class="desc">Advanced AI suite for experienced traders that optimises entries and manages drawdown — market outcomes are never fully predictable.</p>
+      <div class="tool-tf">⏱ Timeframe: 15 Minutes</div>
+      <ul class="tool-features"><li>AI-based risk analysis</li><li>Drawdown control engine</li><li>Advanced indicator stack</li><li>Strategy backtesting</li></ul>
+      <div class="tool-important-note"><span class="note-icon">⚡</span><div><strong>⚠ VERY IMPORTANT:</strong> Only take a real trade when <span class="note-highlight">Payout ≥ 90%</span> AND <span class="note-highlight">Signal Strength ≥ 75%</span>.</div></div>
+    </div>
+
+    <!-- STRATEGY SEPARATOR -->
+    <div class="strategy-sep" data-cat="strategy"><span>✦ Exclusive Global Technical Strategies ✦</span></div>
+
+    <!-- STRATEGY 1 -->
+    <div class="tool-card card4" data-cat="strategy"><div class="card-glow"></div>
+      <span class="tool-badge strategy">Exclusive Strategy</span>
+      <div class="tool-icon">🔱</div>
+      <span class="strategy-tag st-gold">SHI-SHA Signature</span>
+      <h3>THREE CONFLUENCE Strategy</h3>
+      <p class="desc">Flagship strategy combining EMA, RSI, and Volume — trade only when all three confluences align simultaneously.</p>
+      <div class="tool-tf">⏱ 5 Min / 15 Min</div>
+      <div class="strat-detail">
+        <h5>⚙ How It Works</h5>
+        <div class="strat-rule"><span>1</span><span><strong style="color:var(--text)">Trend:</strong> EMA 8/21 crossover confirms dominant direction.</span></div>
+        <div class="strat-rule"><span>2</span><span><strong style="color:var(--text)">Momentum:</strong> RSI 14 confirms overbought/oversold alignment.</span></div>
+        <div class="strat-rule"><span>3</span><span><strong style="color:var(--text)">Volume:</strong> Volume spike confirms institutional entry.</span></div>
+      </div>
+      <div class="tool-important-note"><span class="note-icon">⚡</span><div><strong>⚠ IMPORTANT:</strong> Only trade when <span class="note-highlight">Payout ≥ 90%</span> AND <span class="note-highlight">Signal Strength ≥ 75%</span>. All 3 must align.</div></div>
+    </div>
+
+    <!-- STRATEGY 2 -->
+    <div class="tool-card card5" data-cat="strategy"><div class="card-glow"></div>
+      <span class="tool-badge strategy">Exclusive Strategy</span>
+      <div class="tool-icon">📊</div>
+      <span class="strategy-tag st-purple">BB Squeeze</span>
+      <h3>BB SQUEEZE &amp; BREAKOUT Strategy</h3>
+      <p class="desc">Detects Bollinger Band compression zones and fires breakout signals when volatility expands — catching explosive moves at origin.</p>
+      <div class="tool-tf">⏱ 1 Min / 5 Min</div>
+      <div class="strat-detail">
+        <h5>⚙ How It Works</h5>
+        <div class="strat-rule"><span>1</span><span><strong style="color:var(--text)">BB Squeeze:</strong> Upper &amp; lower bands converge — low volatility phase.</span></div>
+        <div class="strat-rule"><span>2</span><span><strong style="color:var(--text)">Breakout:</strong> Candle closes outside bands — expansion begins.</span></div>
+        <div class="strat-rule"><span>3</span><span><strong style="color:var(--text)">MACD Filter:</strong> Confirms breakout direction to avoid fakeouts.</span></div>
+      </div>
+      <div class="tool-important-note"><span class="note-icon">⚡</span><div><strong>⚠ IMPORTANT:</strong> Only trade when <span class="note-highlight">Payout ≥ 90%</span> AND <span class="note-highlight">Signal Strength ≥ 75%</span>.</div></div>
+    </div>
+
+    <!-- STRATEGY 3 -->
+    <div class="tool-card card6" data-cat="strategy"><div class="card-glow"></div>
+      <span class="tool-badge strategy">Exclusive Strategy</span>
+      <div class="tool-icon">📍</div>
+      <span class="strategy-tag st-red">Pin Bar</span>
+      <h3>PINOCCIO PIN BAR Strategy</h3>
+      <p class="desc">Identifies high-probability pin bar reversals at key S/R zones — one of the most respected price action strategies globally.</p>
+      <div class="tool-tf">⏱ 5 Min / 15 Min</div>
+      <div class="strat-detail">
+        <h5>⚙ How It Works</h5>
+        <div class="strat-rule"><span>1</span><span><strong style="color:var(--text)">Pin Bar:</strong> Long wick (2× body min) at key S/R level detected.</span></div>
+        <div class="strat-rule"><span>2</span><span><strong style="color:var(--text)">Zone Validation:</strong> Confirms S/R or Fibonacci level significance.</span></div>
+        <div class="strat-rule"><span>3</span><span><strong style="color:var(--text)">Entry:</strong> Next candle open after confirmed rejection.</span></div>
+      </div>
+      <div class="tool-important-note"><span class="note-icon">⚡</span><div><strong>⚠ IMPORTANT:</strong> Only trade when <span class="note-highlight">Payout ≥ 90%</span> AND <span class="note-highlight">Signal Strength ≥ 75%</span>.</div></div>
+    </div>
+
+    <!-- STRATEGY 4 -->
+    <div class="tool-card card7" data-cat="strategy"><div class="card-glow"></div>
+      <span class="tool-badge strategy" style="color:#00e5ff;border-color:rgba(0,229,255,.35);background:rgba(0,229,255,.08)">🔥 New Strategy</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(0,255,136,.15))">📈</div>
+      <span class="strategy-tag st-cyan">EMA + RSI + Candle</span>
+      <h3>EMA CROSSOVER + RSI + CANDLE COLOUR Strategy</h3>
+      <p class="desc">Triple-layer confirmation requiring EMA crossover, RSI momentum &amp; candle colour alignment — zero ambiguity entries.</p>
+      <div class="tool-tf">⏱ 1 Min / 5 Min</div>
+      <div class="strat-detail" style="background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(0,255,136,.05));border-color:rgba(0,229,255,.2)">
+        <h5 style="color:#00e5ff">⚙ How It Works</h5>
+        <div class="strat-rule"><span style="background:rgba(0,229,255,.15);border-color:rgba(0,229,255,.25);color:#00e5ff">1</span><span><strong style="color:var(--text)">EMA 5/20 Crossover:</strong> Identifies short-term trend direction.</span></div>
+        <div class="strat-rule"><span style="background:rgba(0,229,255,.15);border-color:rgba(0,229,255,.25);color:#00e5ff">2</span><span><strong style="color:var(--text)">RSI Filter:</strong> Above 50 for BUY, below 50 for SELL. Avoid 45–55 zone.</span></div>
+        <div class="strat-rule"><span style="background:rgba(0,229,255,.15);border-color:rgba(0,229,255,.25);color:#00e5ff">3</span><span><strong style="color:var(--text)">Candle Colour:</strong> GREEN confirms BUY · RED confirms SELL. Never enter on conflict.</span></div>
+      </div>
+      <div class="tool-important-note"><span class="note-icon">⚡</span><div><strong>⚠ IMPORTANT:</strong> All 3 layers must align. <span class="note-highlight">Payout ≥ 90%</span> AND <span class="note-highlight">Signal Strength ≥ 75%</span> required. Missing one = NO TRADE.</div></div>
+    </div>
+
+    <!-- ═══════ INDIA SEPARATOR ═══════ -->
+    <div class="strategy-sep india-sep" data-cat="india"><span>🇮🇳 Exclusive Indian Market Indicators</span></div>
+
+    <!-- INDIA TOOL 1 — NIFTY SUPER TREND -->
+    <div class="tool-card india-card card-nifty" data-cat="india"><div class="card-glow"></div>
+      <span class="tool-badge india-badge-tag">🇮🇳 NSE Exclusive</span>
+      <div class="tool-icon india-icon">📉</div>
+      <span class="strategy-tag st-orange">Nifty 50 · NSE</span>
+      <h3>NIFTY SUPER TREND Indicator</h3>
+      <p class="desc">Purpose-built SuperTrend indicator optimised exclusively for Nifty 50 — calibrated for NSE intraday session behaviour, FII/DII activity windows, and Indian market volatility patterns.</p>
+      <div class="tool-tf india-tf">⏱ Timeframe: 5 Min / 15 Min (NSE Intraday: 9:15 AM – 3:30 PM IST)</div>
+      <div class="strat-detail india-detail">
+        <h5>⚙ How It Works</h5>
+        <div class="strat-rule india-rule"><span>1</span><span><strong style="color:var(--text)">SuperTrend Core:</strong> ATR-based trend band (Period 10, Multiplier 3.0) calibrated for Nifty volatility. Green band = BUY zone · Red band = SELL zone.</span></div>
+        <div class="strat-rule india-rule"><span>2</span><span><strong style="color:var(--text)">Nifty Session Filter:</strong> Signals are filtered for high-liquidity windows — 9:15–10:30 AM &amp; 1:30–3:15 PM IST. Avoids low-volume mid-session chop.</span></div>
+        <div class="strat-rule india-rule"><span>3</span><span><strong style="color:var(--text)">FII/DII Bias Overlay:</strong> Integrates daily FII net buy/sell data as a directional bias confirmation layer.</span></div>
+        <div class="strat-rule india-rule"><span>4</span><span><strong style="color:var(--text)">Nifty PCR Check:</strong> Put-Call Ratio confirmation — PCR above 1.2 adds bullish bias, below 0.8 adds bearish bias to signal strength.</span></div>
+      </div>
+      <ul class="tool-features india-features" style="margin-top:14px">
+        <li>ATR-based SuperTrend tuned for Nifty 50</li>
+        <li>NSE session-aware signal filtering</li>
+        <li>FII/DII daily flow integration</li>
+        <li>Put-Call Ratio bias confirmation</li>
+        <li>Works on Nifty Futures &amp; Options</li>
+        <li>Compatible: Zerodha Kite, Upstox, Angel One</li>
+      </ul>
+      <div class="tool-important-note" style="border-color:rgba(255,153,51,.5);background:linear-gradient(135deg,rgba(255,153,51,.09),rgba(255,100,0,.06))">
+        <span class="note-icon" style="background:rgba(255,153,51,.2);border-color:rgba(255,153,51,.5);color:#ff9933">⚡</span>
+        <div style="color:rgba(255,220,170,.9)"><strong style="color:#ff9933">⚠ VERY IMPORTANT:</strong> Only take a real trade when <span class="note-highlight" style="background:rgba(255,153,51,.2);border-color:rgba(255,153,51,.5);color:#ff9933">Signal Strength ≥ 75%</span> AND trend band is confirmed. Nifty moves fast — always use stop-loss.</div>
+      </div>
+      <div class="sebi-tool-note">
+        <strong>🇮🇳 SEBI &amp; NSE Notice:</strong> This tool is for technical analysis &amp; educational purposes only. SHI-SHA Tech is NOT SEBI-registered. Nifty F&amp;O trading carries extreme risk — <strong>most retail F&amp;O traders lose money.</strong> Consult a SEBI-registered advisor. Past backtested results do not guarantee future profits.
+      </div>
+    </div>
+
+    <!-- INDIA TOOL 2 — BANKNIFTY -->
+    <div class="tool-card india-card card-bnk" data-cat="india"><div class="card-glow"></div>
+      <span class="tool-badge new-india">🔥 High Demand</span>
+      <div class="tool-icon india-icon" style="background:linear-gradient(135deg,rgba(19,136,8,.2),rgba(0,200,80,.12))">🏦</div>
+      <span class="strategy-tag st-green">BankNifty · NSE</span>
+      <h3>BANKNIFTY SUPER ENTRY Indicator</h3>
+      <p class="desc">Elite entry signal system built exclusively for BankNifty — India's most volatile and widely-traded index. Engineered for precision scalping and option buying entries during high-volatility banking sector moves.</p>
+      <div class="tool-tf india-tf">⏱ Timeframe: 1 Min / 3 Min / 5 Min (NSE: 9:15 AM – 3:30 PM IST)</div>
+      <div class="strat-detail india-detail" style="background:linear-gradient(135deg,rgba(19,136,8,.08),rgba(0,200,80,.05));border-color:rgba(19,136,8,.3)">
+        <h5 style="color:#3ddc34">⚙ How It Works</h5>
+        <div class="strat-rule india-rule"><span>1</span><span><strong style="color:var(--text)">VWAP + EMA Stack:</strong> BankNifty price vs VWAP and EMA 9/21 determines intraday trend bias — trade only in VWAP direction.</span></div>
+        <div class="strat-rule india-rule"><span>2</span><span><strong style="color:var(--text)">Banking Sector Trigger:</strong> Monitors real-time Bank Nifty constituent moves (HDFC, ICICI, SBI, Axis) — fires entry when 3+ heavyweights align directionally.</span></div>
+        <div class="strat-rule india-rule"><span>3</span><span><strong style="color:var(--text)">Options OI Surge:</strong> Detects sudden Open Interest buildup at key strikes — signals smart money positioning for breakout/breakdown.</span></div>
+        <div class="strat-rule india-rule"><span>4</span><span><strong style="color:var(--text)">Super Entry Zone:</strong> All 3 layers confirmed → "SUPER ENTRY" signal fires with strength score. Target: 1:2 risk-reward minimum.</span></div>
+      </div>
+      <ul class="tool-features india-features" style="margin-top:14px">
+        <li>VWAP + EMA 9/21 intraday trend engine</li>
+        <li>Real-time banking constituent alignment</li>
+        <li>Options OI surge detection</li>
+        <li>Super Entry strength scoring system</li>
+        <li>Scalping &amp; option buying entries</li>
+        <li>Compatible: Zerodha, Upstox, Fyers, Dhan</li>
+      </ul>
+      <div class="tool-important-note" style="border-color:rgba(19,136,8,.5);background:linear-gradient(135deg,rgba(19,136,8,.09),rgba(0,200,80,.05))">
+        <span class="note-icon" style="background:rgba(19,136,8,.2);border-color:rgba(19,136,8,.5);color:#3ddc34">⚡</span>
+        <div style="color:rgba(200,255,200,.9)"><strong style="color:#3ddc34">⚠ VERY IMPORTANT:</strong> BankNifty is extremely volatile. <span class="note-highlight" style="background:rgba(19,136,8,.2);border-color:rgba(19,136,8,.5);color:#3ddc34">Super Entry signal only</span> — never enter without signal confirmation. Always set stop-loss. Options can expire worthless.</div>
+      </div>
+      <div class="sebi-tool-note">
+        <strong>🇮🇳 SEBI &amp; NSE Notice:</strong> BankNifty Options/Futures trading carries <strong>extreme financial risk</strong>. SHI-SHA Tech is NOT SEBI-registered. This tool is educational only. <strong>Options buyers lose premium 100% if trade goes wrong.</strong> No profits guaranteed. Consult a SEBI-registered advisor.
+      </div>
+    </div>
+
+    <!-- INDIA TOOL 3 — CRUDE OIL -->
+    <div class="tool-card india-card card-crude" data-cat="india"><div class="card-glow"></div>
+      <span class="tool-badge india-badge-tag">🛢️ MCX Exclusive</span>
+      <div class="tool-icon india-icon" style="background:linear-gradient(135deg,rgba(139,69,19,.25),rgba(180,100,40,.15))">🛢️</div>
+      <span class="strategy-tag st-brown">Crude Oil · MCX</span>
+      <h3>SHI-SHA CRUDE OIL Indicator</h3>
+      <p class="desc">Comprehensive MCX Crude Oil signal indicator integrating global crude price drivers — OPEC decisions, USD index movements, global inventory data — with Indian MCX session-specific technical signals.</p>
+      <div class="tool-tf india-tf">⏱ Timeframe: 5 Min / 15 Min (MCX Active: 9:00 AM – 11:30 PM IST)</div>
+      <div class="strat-detail india-detail" style="background:linear-gradient(135deg,rgba(139,69,19,.1),rgba(180,100,40,.06));border-color:rgba(180,100,40,.3)">
+        <h5 style="color:#e8a060">⚙ How It Works</h5>
+        <div class="strat-rule india-rule"><span>1</span><span><strong style="color:var(--text)">MCX Technical Core:</strong> EMA 20/50 + RSI 14 + ATR-based dynamic S/R levels calibrated for MCX Crude Oil lot size (100 barrels).</span></div>
+        <div class="strat-rule india-rule"><span>2</span><span><strong style="color:var(--text)">Global Crude Driver Overlay:</strong> Monitors NYMEX WTI &amp; Brent price action, USD Index (DXY) direction, and EIA weekly inventory data windows.</span></div>
+        <div class="strat-rule india-rule"><span>3</span><span><strong style="color:var(--text)">MCX Session Segmenter:</strong> Separates Indian morning (9 AM–1 PM) and evening/US overlap sessions (6 PM–11:30 PM) — signals weighted by liquidity &amp; volatility of each window.</span></div>
+        <div class="strat-rule india-rule"><span>4</span><span><strong style="color:var(--text)">Rupee-Crude Correlation:</strong> USD/INR rate impact on MCX crude pricing is factored in — INR depreciation = crude price premium alert.</span></div>
+      </div>
+      <ul class="tool-features india-features" style="margin-top:14px">
+        <li>EMA/RSI/ATR stack for MCX Crude</li>
+        <li>NYMEX WTI &amp; Brent alignment filter</li>
+        <li>USD Index (DXY) directional overlay</li>
+        <li>MCX session-aware signal weighting</li>
+        <li>USD/INR rupee impact integration</li>
+        <li>Compatible: Zerodha, Angel One, ICICI Direct, Sharekhan</li>
+      </ul>
+      <div class="tool-important-note" style="border-color:rgba(180,100,40,.5);background:linear-gradient(135deg,rgba(139,69,19,.1),rgba(180,100,40,.07))">
+        <span class="note-icon" style="background:rgba(180,100,40,.2);border-color:rgba(180,100,40,.5);color:#e8a060">⚡</span>
+        <div style="color:rgba(255,220,180,.9)"><strong style="color:#e8a060">⚠ VERY IMPORTANT:</strong> Crude Oil is highly volatile — geopolitical events can cause sudden large moves. <span class="note-highlight" style="background:rgba(180,100,40,.2);border-color:rgba(180,100,40,.4);color:#e8a060">Always use stop-loss</span>. Never trade around EIA/OPEC announcements without confirming signal.</div>
+      </div>
+      <div class="sebi-tool-note">
+        <strong>🇮🇳 MCX &amp; SEBI Notice:</strong> MCX Crude Oil futures &amp; options involve commodity trading risk. SHI-SHA Tech is NOT SEBI/MCX-registered. This tool is for educational purposes only. <strong>Commodity prices can move sharply on geopolitical events.</strong> No profits guaranteed. Losses can exceed initial margin.
+      </div>
+    </div>
+
+    <!-- INDIA TOOL 4 — GOLD -->
+    <div class="tool-card india-card card-goldind" data-cat="india"><div class="card-glow"></div>
+      <span class="tool-badge new-india">✨ Premium Indian</span>
+      <div class="tool-icon india-icon" style="background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,165,0,.12))">🥇</div>
+      <span class="strategy-tag st-yellow">Gold · MCX</span>
+      <h3>SHI-SHA GOLD Indicator</h3>
+      <p class="desc">MCX Gold-specific signal engine integrating global COMEX gold price action, USD strength, inflation dynamics, and Indian festival/seasonal demand patterns with precise MCX technical entries.</p>
+      <div class="tool-tf india-tf">⏱ Timeframe: 5 Min / 15 Min / 1 Hr (MCX Gold Active Hours)</div>
+      <div class="strat-detail india-detail" style="background:linear-gradient(135deg,rgba(255,215,0,.07),rgba(255,165,0,.05));border-color:rgba(255,215,0,.3)">
+        <h5 style="color:#ffd700">⚙ How It Works</h5>
+        <div class="strat-rule india-rule"><span>1</span><span><strong style="color:var(--text)">MCX Gold Technical Core:</strong> SuperTrend (10,3) + Bollinger Bands (20,2) + RSI 14 — all calibrated for MCX Gold Mini &amp; Standard lot specifications.</span></div>
+        <div class="strat-rule india-rule"><span>2</span><span><strong style="color:var(--text)">COMEX Alignment:</strong> Cross-references COMEX spot gold (&amp; US Futures) direction — MCX signals only confirmed when COMEX direction aligns within ±0.3% deviation.</span></div>
+        <div class="strat-rule india-rule"><span>3</span><span><strong style="color:var(--text)">Safe-Haven &amp; Macro Overlay:</strong> Monitors USD Index (DXY), US 10Y bond yields, and VIX — rising VIX + falling DXY = strong Gold bullish signal booster.</span></div>
+        <div class="strat-rule india-rule"><span>4</span><span><strong style="color:var(--text)">Indian Seasonal Filter:</strong> Flags elevated demand probability during Dhanteras, Akshaya Tritiya, and wedding season months — adjusts signal sensitivity accordingly.</span></div>
+      </div>
+      <ul class="tool-features india-features" style="margin-top:14px">
+        <li>SuperTrend + BB + RSI for MCX Gold</li>
+        <li>COMEX spot gold alignment filter</li>
+        <li>USD Index &amp; US bond yield overlay</li>
+        <li>VIX safe-haven demand sensor</li>
+        <li>Indian seasonal demand calendar</li>
+        <li>Compatible: Zerodha, Upstox, Angel One, 5Paisa</li>
+      </ul>
+      <div class="tool-important-note" style="border-color:rgba(255,215,0,.5);background:linear-gradient(135deg,rgba(255,215,0,.09),rgba(255,165,0,.06))">
+        <span class="note-icon" style="background:rgba(255,215,0,.18);border-color:rgba(255,215,0,.5);color:#ffd700">⚡</span>
+        <div style="color:rgba(255,240,180,.9)"><strong style="color:#ffd700">⚠ VERY IMPORTANT:</strong> Gold prices are sensitive to RBI policy, geopolitics, and global macro events. <span class="note-highlight" style="background:rgba(255,215,0,.18);border-color:rgba(255,215,0,.4);color:#ffd700">COMEX must align</span> with MCX signal before entry. Always use stop-loss.</div>
+      </div>
+      <div class="sebi-tool-note">
+        <strong>🇮🇳 MCX &amp; SEBI Notice:</strong> MCX Gold trading is a commodity market product. SHI-SHA Tech is NOT SEBI/MCX-registered. This tool is for educational &amp; technical analysis purposes only. <strong>Gold prices can be highly volatile around RBI/Fed announcements.</strong> No profits guaranteed. Never trade with funds you cannot afford to lose.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div style="text-align:center">
+    <div class="section-tag">Features</div>
+    <h2 class="section-title">Why Choose <span class="g">SHI-SHA Tech</span>?</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon">🧠</div><h4>AI-Based Analysis</h4><p>Deep learning models trained on millions of data points for superior signal quality across all markets.</p></div>
+    <div class="feat-card" style="border-color:rgba(255,153,51,.2)"><div class="feat-icon">🇮🇳</div><h4>Indian Market Expertise</h4><p>Purpose-built tools for Nifty, BankNifty, MCX Crude &amp; Gold — calibrated for NSE/MCX session dynamics.</p></div>
+    <div class="feat-card"><div class="feat-icon">🌐</div><h4>Multi-Market Support</h4><p>Binary, Crypto, Forex, Gold, Nifty, BankNifty, and Crude Oil — all covered in one ecosystem.</p></div>
+    <div class="feat-card"><div class="feat-icon">⚡</div><h4>Fast Signal Processing</h4><p>Real-time signals with millisecond precision. Never miss an intraday entry window.</p></div>
+    <div class="feat-card"><div class="feat-icon">🛡️</div><h4>Risk Management Built-In</h4><p>Stop-loss integration, position sizing, and drawdown control — losses are still possible.</p></div>
+    <div class="feat-card"><div class="feat-icon">📊</div><h4>Live Dashboard</h4><p>Real-time monitoring across global &amp; Indian markets on any device — clean, intuitive interface.</p></div>
+  </div>
+</section>
+
+<!-- LIVE -->
+<section id="live">
+  <canvas id="liveCanvas"></canvas>
+  <div class="live-inner">
+    <div class="live-badge"><span class="live-dot"></span> Live Signals Running — Global &amp; Indian Markets</div>
+    <h2 class="section-title">Real-Time <span class="g">Signal Feed</span></h2>
+    <p style="color:var(--muted);font-size:.86rem">Live AI signals across Binary, Forex, Crypto, Nifty, BankNifty, Crude Oil &amp; MCX Gold.</p>
+    <div class="signals-feed">
+      <div class="feed-header"><span>Asset</span><span>Signal</span><span>Time</span><span>Acc.</span><span style="text-align:right">TF</span></div>
+      <div id="signalFeed"></div>
+      <p class="feed-disclaimer">⚠ Signals for informational &amp; educational purposes only. Not financial advice. No profits guaranteed. Historical accuracy ≠ future results. Indian market signals — NOT SEBI-approved advice. Always manage risk &amp; use stop-loss.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section id="platforms">
+  <div style="text-align:center">
+    <div class="section-tag">Recommended Platforms</div>
+    <h2 class="section-title">Trading Platforms — <span class="gi">Indian</span> &amp; <span class="g">Global</span></h2>
+    <p class="section-sub" style="margin:0 auto">SEBI-regulated Indian brokers and global binary/forex platforms compatible with SHI-SHA Tech tools. Always verify regulations in your jurisdiction.</p>
+  </div>
+
+  <!-- INDIAN PLATFORMS -->
+  <div class="platform-section">
+    <div class="platform-section-title india-title">
+      <span style="font-size:1.8rem">🇮🇳</span>
+      <div>
+        <h3>Indian Stock Market Platforms</h3>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:3px">SEBI-Regulated Brokers · NSE · BSE · MCX · NFO Compatible</p>
+      </div>
+    </div>
+    <div class="platforms-grid">
+
+      <div class="platform-card india-platform">
+        <span class="platform-rank rank-india">🥇 #1 India</span>
+        <div class="platform-icon">🟢</div>
+        <h4>Zerodha (Kite)</h4>
+        <p class="pdesc">India's largest discount broker. Best-in-class Kite platform with advanced charting. Ideal for SHI-SHA Nifty, BankNifty &amp; MCX tool integration.</p>
+        <div><span class="ptag ptag-green">SEBI Regulated</span><span class="ptag ptag-orange">₹0 Equity Delivery</span><span class="ptag ptag-blue">NSE / BSE / MCX</span><span class="ptag ptag-purple">F&amp;O Ready</span></div>
+      </div>
+
+      <div class="platform-card india-platform">
+        <span class="platform-rank rank-india">🥈 #2 India</span>
+        <div class="platform-icon">🔵</div>
+        <h4>Upstox</h4>
+        <p class="pdesc">Backed by Ratan Tata. Fast execution with powerful charting tools — excellent for BankNifty scalping and Crude Oil signals.</p>
+        <div><span class="ptag ptag-green">SEBI Regulated</span><span class="ptag ptag-orange">Low Brokerage</span><span class="ptag ptag-blue">NSE / BSE / MCX</span><span class="ptag ptag-yellow">Options Chain</span></div>
+      </div>
+
+      <div class="platform-card india-platform">
+        <span class="platform-rank rank-india">🥉 #3 India</span>
+        <div class="platform-icon">🟠</div>
+        <h4>Angel One (SmartAPI)</h4>
+        <p class="pdesc">Full-service broker with AI-powered SmartAPI integration — perfect for automating SHI-SHA India signals. Strong Nifty &amp; Gold F&amp;O support.</p>
+        <div><span class="ptag ptag-green">SEBI Regulated</span><span class="ptag ptag-orange">SmartAPI</span><span class="ptag ptag-blue">NSE / BSE / MCX</span><span class="ptag ptag-purple">Algo Ready</span></div>
+      </div>
+
+      <div class="platform-card india-platform">
+        <span class="platform-rank rank-india">⭐ Top Pick</span>
+        <div class="platform-icon">🟣</div>
+        <h4>Fyers</h4>
+        <p class="pdesc">Best charting platform in India with TradingView integration. Excellent for SHI-SHA indicator overlays on Nifty &amp; BankNifty charts.</p>
+        <div><span class="ptag ptag-green">SEBI Regulated</span><span class="ptag ptag-yellow">TradingView</span><span class="ptag ptag-blue">NSE / BSE / MCX</span><span class="ptag ptag-grey">Free API</span></div>
+      </div>
+
+      <div class="platform-card india-platform">
+        <span class="platform-rank rank-india">📱 Best App</span>
+        <div class="platform-icon">🔷</div>
+        <h4>Dhan</h4>
+        <p class="pdesc">Modern options-first platform with superior Options chain UI. Ideal for BankNifty SUPER ENTRY option buying strategies.</p>
+        <div><span class="ptag ptag-green">SEBI Regulated</span><span class="ptag ptag-purple">Options First</span><span class="ptag ptag-blue">NSE / BSE</span><span class="ptag ptag-orange">Mobile First</span></div>
+      </div>
+
+      <div class="platform-card india-platform">
+        <span class="platform-rank rank-india">🏦 Full Service</span>
+        <div class="platform-icon">🔴</div>
+        <h4>ICICI Direct / HDFC Sky</h4>
+        <p class="pdesc">Bank-backed full-service brokers. Best for MCX Crude Oil &amp; Gold commodity trading with strong margin support and research tools.</p>
+        <div><span class="ptag ptag-green">SEBI Regulated</span><span class="ptag ptag-orange">MCX Commodity</span><span class="ptag ptag-blue">NSE / BSE / MCX</span><span class="ptag ptag-grey">Bank Backed</span></div>
+      </div>
+
+    </div>
+    <div class="platform-warning">
+      <strong>🇮🇳 Important SEBI Notice for Indian Traders:</strong> All Indian brokers listed above are SEBI-regulated. SHI-SHA Tech tools are for educational &amp; technical analysis purposes only — they do NOT constitute SEBI-registered investment advice. F&amp;O and intraday trading involves very high risk. <strong>According to SEBI data, ~90% of individual F&amp;O traders in India incur losses.</strong> Always trade with proper risk management, use stop-loss orders, and consult a SEBI-registered investment advisor before making financial decisions. Past signal accuracy does not guarantee future profits.
+    </div>
+  </div>
+
+  <!-- GLOBAL PLATFORMS -->
+  <div class="platform-section" style="margin-top:50px">
+    <div class="platform-section-title global-title">
+      <span style="font-size:1.8rem">🌐</span>
+      <div>
+        <h3>Global Binary &amp; Forex Platforms</h3>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:3px">Compatible with SHI-SHA Global AI Tools &amp; Strategies · Verify local regulations</p>
+      </div>
+    </div>
+    <div class="platforms-grid">
+      <div class="platform-card global-platform"><span class="platform-rank rank-global">🥇 Best Overall</span><div class="platform-icon">⭐</div><h4>Pocket Option</h4><p class="pdesc">Best for social &amp; copy trading with wide-range assets and instant execution.</p><div><span class="ptag ptag-green">Min $5 Deposit</span><span class="ptag ptag-grey">Copy Trading</span></div></div>
+      <div class="platform-card global-platform"><span class="platform-rank rank-global">⚡ Fastest</span><div class="platform-icon">🔵</div><h4>Quotex</h4><p class="pdesc">Best for fast execution and free professional-grade trading tools.</p><div><span class="ptag ptag-blue">Pro Tools Free</span><span class="ptag ptag-grey">High Speed</span></div></div>
+      <div class="platform-card global-platform"><span class="platform-rank rank-global">🏆 Pioneer</span><div class="platform-icon">🟢</div><h4>IQ Option</h4><p class="pdesc">Industry pioneer with regulated operations and up to 95% payouts.</p><div><span class="ptag ptag-green">Up to 95% Payout</span><span class="ptag ptag-grey">Regulated</span></div></div>
+      <div class="platform-card global-platform"><span class="platform-rank rank-global">🌐 Variety</span><div class="platform-icon">🟠</div><h4>Deriv</h4><p class="pdesc">Massive asset variety — Forex, Crypto, and Derived Indices on MT5.</p><div><span class="ptag ptag-orange">Min $5</span><span class="ptag ptag-grey">MT5 Support</span></div></div>
+      <div class="platform-card global-platform"><span class="platform-rank rank-global">🎓 Beginners</span><div class="platform-icon">🔷</div><h4>Binomo</h4><p class="pdesc">Simple interface with education hub and structured support for new traders.</p><div><span class="ptag ptag-blue">Education Hub</span><span class="ptag ptag-grey">Global Support</span></div></div>
+    </div>
+    <div class="platform-warning" style="background:rgba(255,80,80,.05);border-color:rgba(255,80,80,.2)">
+      <strong style="color:#ff8888">⚠ Global Platform Warning:</strong> Binary options trading is <strong>banned or restricted in many countries including India</strong>. These platforms are listed for informational purposes only. It is your sole responsibility to verify legality in your jurisdiction before trading. SHI-SHA Tech is not responsible for any legal consequences of trading on these platforms. No profits guaranteed.
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div style="text-align:center">
+    <div class="section-tag">Contact</div>
+    <h2 class="section-title">Get in <span class="g">Touch</span></h2>
+    <p class="section-sub" style="margin:0 auto">Ready to elevate your trading analysis? Reach out and our team will guide you.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-card"><div class="contact-icon">📞</div><div><h4>Phone</h4><p>+91 8629924099</p></div></div>
+      <div class="contact-card"><div class="contact-icon">📧</div><div><h4>Email</h4><p>shisha.techbinary01@gmail.com</p></div></div>
+      <div class="contact-card"><div class="contact-icon">💬</div><div><h4>WhatsApp &amp; Telegram</h4><p>Instant support — Indian &amp; Global markets</p></div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="https://wa.me/918629924099" target="_blank" class="wa-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.121 1.523 5.855L.057 23.882a.5.5 0 00.611.611l6.101-1.498A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.97 0-3.81-.534-5.392-1.463l-.387-.23-4.01.985.997-3.923-.252-.402A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" fill="white"/></svg>
+          WhatsApp
+        </a>
+        <a href="https://t.me/ShishaTechSignals" target="_blank" class="wa-btn" style="background:linear-gradient(135deg,#229ED9,#1a7aaa)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 13.982l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.958.577z" fill="white"/></svg>
+          Telegram
+        </a>
+        <button onclick="openKYC()" class="wa-btn" style="background:linear-gradient(135deg,var(--neon2),var(--neon));border:none;cursor:pointer">📋 KYC</button>
+      </div>
+      <div style="background:rgba(255,153,51,.06);border:1px solid rgba(255,153,51,.2);border-radius:12px;padding:13px 15px;font-size:.75rem;color:rgba(255,200,130,.75);line-height:1.7">
+        <strong style="color:var(--india)">🇮🇳 Notice:</strong> Our team provides tool guidance &amp; support only. We do not offer financial advice, guaranteed returns, or SEBI-regulated advisory services. For Indian market investments, always consult a SEBI-registered investment advisor.
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3 style="font-size:1.02rem;margin-bottom:20px;font-weight:700">Send a Message</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Name</label><input type="text" placeholder="Your name"/></div>
+        <div class="form-group"><label>Phone</label><input type="tel" placeholder="+91 XXXXXXXXXX"/></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@email.com"/></div>
+      <div class="form-group"><label>Interested In</label>
+        <select>
+          <option>— Global Tools —</option>
+          <option>AI Market Analyzer</option>
+          <option>Smart Risk Engine</option>
+          <option>Capital Protection AI</option>
+          <option>Three Confluence Strategy</option>
+          <option>BB Squeeze &amp; Breakout Strategy</option>
+          <option>Pinoccio Pin Bar Strategy</option>
+          <option>EMA Crossover + RSI + Candle Strategy</option>
+          <option>— Indian Market Tools —</option>
+          <option>🇮🇳 Nifty Super Trend Indicator</option>
+          <option>🇮🇳 BankNifty Super Entry Indicator</option>
+          <option>🇮🇳 SHI-SHA Crude Oil Indicator</option>
+          <option>🇮🇳 SHI-SHA Gold Indicator (MCX)</option>
+          <option>All 11 Tools &amp; Strategies</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your trading goals — Indian market or global..."></textarea></div>
+      <button class="form-submit" onclick="handleSubmit()">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-disclaimer">
+    <strong>⚠ Risk Disclosure — No Guarantee of Profits:</strong> Trading in binary options, forex, crypto, Nifty 50, BankNifty, MCX Crude Oil, MCX Gold, and other financial instruments involves a <strong>high level of risk</strong>. <strong>There is absolutely no guarantee of profit.</strong> You may lose part or all of your capital. SHI-SHA Tech tools are for informational and educational assistance only — not financial advice. Past backtested accuracy is NOT indicative of future results. <strong>SHI-SHA Tech is NOT registered with SEBI as an Investment Advisor or Research Analyst.</strong> Indian market tools are for technical analysis purposes only. According to SEBI, ~90% of retail F&amp;O traders incur losses. Binary options may be prohibited in your country — verify local laws. Trade responsibly.
+  </div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <svg width="36" height="36" viewBox="0 0 38 38" fill="none"><defs><linearGradient id="flg1" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00f0ff"/><stop offset="100%" stop-color="#7b2fff"/></linearGradient><filter id="fglow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><polygon points="19,2 34,10.5 34,27.5 19,36 4,27.5 4,10.5" fill="url(#flg1)" opacity="0.15" stroke="url(#flg1)" stroke-width="1.2"/><rect x="10" y="22" width="3.5" height="8" rx="1" fill="url(#flg1)" filter="url(#fglow)"/><rect x="15" y="17" width="3.5" height="13" rx="1" fill="url(#flg1)" filter="url(#fglow)"/><rect x="20" y="12" width="3.5" height="18" rx="1" fill="url(#flg1)" filter="url(#fglow)"/><rect x="25" y="19" width="3.5" height="11" rx="1" fill="url(#flg1)" filter="url(#fglow)"/><polyline points="11.75,21 16.75,16 21.75,11 26.75,18" fill="none" stroke="#00f0ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#fglow)"/><circle cx="26.75" cy="18" r="1.8" fill="#00f0ff" filter="url(#fglow)"/></svg>
+        <div style="line-height:1"><div style="font-size:1.1rem;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,#00f0ff,#7b2fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SHI-SHA</div><div style="font-size:.52rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-top:2px">TECH · INDIA</div></div>
+      </div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.7;max-width:280px">11 premium tools — 7 global + 4 Indian market indicators. Empowering traders. No profits guaranteed. Not SEBI-registered.</p>
+      <div class="social-links">
+        <a href="https://wa.me/918629924099" target="_blank" class="social-btn" title="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#25D366"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.121 1.523 5.855L.057 23.882a.5.5 0 00.611.611l6.101-1.498A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.97 0-3.81-.534-5.392-1.463l-.387-.23-4.01.985.997-3.923-.252-.402A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" fill="#25D366"/></svg></a>
+        <a href="https://instagram.com/sishatech01" target="_blank" class="social-btn" title="Instagram" style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);border-color:rgba(253,29,29,.4)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="white" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1" fill="white"/></svg></a>
+        <a href="https://t.me/ShishaTechSignals" target="_blank" class="social-btn" title="Telegram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 13.982l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.958.577z" fill="#229ED9"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#tools">All 11 Tools</a></li>
+        <li><a href="#platforms">Indian Platforms</a></li>
+        <li><a href="#live">Live Signals</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#" onclick="openModal('terms');return false">Terms &amp; Conditions</a></li>
+        <li><a href="#" onclick="openModal('privacy');return false">Privacy Policy</a></li>
+        <li><a href="#" onclick="openModal('disclaimer');return false">Risk Disclaimer</a></li>
+        <li><a href="#contact">Support</a></li>
+      </ul>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:16px">📞 +91 8629924099</p>
+      <p style="font-size:.73rem;color:var(--muted);margin-top:5px">shisha.techbinary01@gmail.com</p>
+      <p style="font-size:.7rem;color:rgba(255,153,51,.5);margin-top:8px;border:1px solid rgba(255,153,51,.2);padding:4px 10px;border-radius:8px;display:inline-block">NOT SEBI Registered</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SHI-SHA Tech. All rights reserved. · 🇮🇳 India</span>
+    <div class="footer-legal-links">
+      <a href="#" onclick="openModal('terms');return false">Terms</a>
+      <a href="#" onclick="openModal('privacy');return false">Privacy</a>
+      <a href="#" onclick="openModal('disclaimer');return false">Risk Disclaimer</a>
+    </div>
+  </div>
+</footer>
+
+<!-- LEGAL MODALS -->
+<div class="modal-overlay" id="modal-terms">
+  <div class="modal-box">
+    <div class="modal-head"><h3><span>Terms &amp;</span> Conditions</h3><button class="modal-close" onclick="closeModal('terms')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:.74rem;color:var(--muted)">Last Updated: January 2025</p>
+      <div class="warn-box"><strong>⚠ Important:</strong> By using SHI-SHA Tech services, you agree to these Terms in full.</div>
+      <h4>1. Acceptance of Terms</h4><p>By accessing or using any tool, signal, strategy, or content by SHI-SHA Tech, you agree to be bound by these Terms.</p>
+      <h4>2. No Financial Advice — No Guaranteed Profits</h4><div class="warn-box"><strong>⛔ CRITICAL:</strong> SHI-SHA Tech does NOT provide financial advice and does NOT guarantee profits. All tools — including Indian market tools for Nifty, BankNifty, Crude Oil, and Gold — are for informational &amp; educational purposes only.</div>
+      <h4>3. SEBI Compliance Notice</h4><p>SHI-SHA Tech is <strong>NOT registered with SEBI</strong> as an Investment Advisor, Research Analyst, or Portfolio Manager. Indian market tools do not constitute SEBI-regulated advice.</p>
+      <h4>4. User Eligibility</h4><ul><li>Must be at least 18 years of age.</li><li>Must ensure trading is legal in your jurisdiction.</li><li>You accept full responsibility for all trading decisions.</li></ul>
+      <h4>5. Intellectual Property</h4><p>All tools, algorithms, strategies (including Indian indicators), and branding are exclusive IP of SHI-SHA Tech. Reproduction or resale without written permission is strictly prohibited.</p>
+      <h4>6. Limitation of Liability</h4><p>SHI-SHA Tech shall not be liable for any direct, indirect, or consequential damages including trading losses arising from use of tools, signals, or strategies.</p>
+      <h4>7. Governing Law</h4><p>Governed by the laws of India. Disputes subject to courts in Madhya Pradesh, India.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-privacy">
+  <div class="modal-box">
+    <div class="modal-head"><h3><span>Privacy</span> Policy</h3><button class="modal-close" onclick="closeModal('privacy')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:.74rem;color:var(--muted)">Last Updated: January 2025</p>
+      <h4>1. Information We Collect</h4><p>Name, phone, email, usage data, and device information for service delivery and security.</p>
+      <h4>2. How We Use Your Data</h4><ul><li>Respond to inquiries and provide support.</li><li>Deliver purchased tools and strategies.</li><li>Send product updates (with consent).</li><li>Improve tools and user experience.</li></ul>
+      <h4>3. Data Sharing</h4><p>SHI-SHA Tech does <strong>not sell, rent, or trade</strong> your personal information to any third party.</p>
+      <h4>4. Data Security</h4><p>Industry-standard security measures are in place. No internet transmission is 100% secure.</p>
+      <h4>5. Your Rights</h4><ul><li>Access, correct, or delete your personal data.</li><li>Withdraw consent to marketing communications at any time.</li></ul>
+      <h4>6. Contact</h4><p><strong>shisha.techbinary01@gmail.com</strong> | <strong>+91 8629924099</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-disclaimer">
+  <div class="modal-box">
+    <div class="modal-head"><h3><span>Risk</span> Disclaimer</h3><button class="modal-close" onclick="closeModal('disclaimer')">✕</button></div>
+    <div class="modal-body">
+      <div class="warn-box" style="font-size:.85rem"><strong>⛔ READ THIS CAREFULLY BEFORE USING ANY SHI-SHA TECH TOOL OR STRATEGY.</strong></div>
+      <h4>No Guaranteed Profits</h4><p>SHI-SHA Tech makes <strong>absolutely no guarantee of profits</strong> for any tool — including Nifty Super Trend, BankNifty Super Entry, Crude Oil, and Gold indicators. Signal accuracy figures are from historical backtesting only.</p>
+      <h4>SEBI Notice — Indian Market Tools</h4><div class="warn-box" style="border-color:rgba(255,153,51,.4);background:rgba(255,153,51,.06);color:rgba(255,210,150,.8)"><strong style="color:var(--india)">🇮🇳 SEBI Regulatory Notice:</strong> SHI-SHA Tech is NOT registered with SEBI. Indian market indicators (Nifty, BankNifty, Crude Oil, Gold) are for educational &amp; technical analysis purposes only. They are NOT SEBI-regulated investment advice. According to SEBI data, <strong>approximately 90% of individual F&amp;O traders in India incur net losses.</strong></div>
+      <h4>High Risk of Loss</h4><p>Trading binary options, forex, crypto, Nifty/BankNifty F&amp;O, and MCX commodities carries a <strong>very high level of risk</strong>. You may lose your entire invested capital.</p>
+      <h4>MCX Commodity Risk</h4><p>Crude Oil and Gold prices on MCX are influenced by global geopolitical events, OPEC decisions, US Fed policy, and RBI policy — events that can cause sudden, large, unpredictable price movements.</p>
+      <h4>User Acknowledgment</h4><ul><li>You are at least 18 years of age.</li><li>You understand and fully accept all trading risks.</li><li>No profits are guaranteed.</li><li>You will not hold SHI-SHA Tech liable for any losses.</li><li>For Indian markets, you will consult a SEBI-registered advisor.</li></ul>
+      <div class="warn-box" style="margin-top:18px"><strong>⚠ Final Warning:</strong> If you are uncomfortable with losing your entire investment, please do not trade.</div>
+    </div>
+  </div>
+</div>
+
+<!-- KYC MODAL -->
+<div class="modal-overlay" id="modal-kyc" style="align-items:flex-start;padding:20px;overflow-y:auto">
+  <div class="modal-box" style="max-width:750px;width:100%;margin:auto;max-height:none">
+    <div class="modal-head" style="background:linear-gradient(135deg,rgba(0,240,255,.08),rgba(123,47,255,.08))">
+      <div><h3><span>KYC</span> Verification</h3><p style="font-size:.7rem;color:var(--muted);margin-top:3px;letter-spacing:1px">KNOW YOUR CLIENT — SECURE ONBOARDING</p></div>
+      <button class="modal-close" onclick="closeKYC()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:26px">
+      <div id="kycSteps" style="display:flex;gap:0;margin-bottom:24px;border-radius:12px;overflow:hidden;border:1px solid var(--border)">
+        <div id="step-ind-1" style="flex:1;padding:10px;text-align:center;background:linear-gradient(135deg,rgba(0,240,255,.15),rgba(123,47,255,.1));font-size:.7rem;font-weight:800;letter-spacing:1px;color:var(--neon);border-right:1px solid var(--border)">① PERSONAL</div>
+        <div id="step-ind-2" style="flex:1;padding:10px;text-align:center;background:var(--glass2);font-size:.7rem;font-weight:800;letter-spacing:1px;color:var(--muted);border-right:1px solid var(--border)">② DOCUMENTS</div>
+        <div id="step-ind-3" style="flex:1;padding:10px;text-align:center;background:var(--glass2);font-size:.7rem;font-weight:800;letter-spacing:1px;color:var(--muted)">③ SUBMIT</div>
+      </div>
+      <div class="warn-box" style="margin-bottom:20px"><strong>🔒 Secure &amp; Confidential:</strong> KYC documents are submitted directly to <strong>shisha.techbinary01@gmail.com</strong> and used solely for client verification.</div>
+      <!-- Step 1 -->
+      <div id="kyc-page-1">
+        <h4 style="margin-bottom:16px">Personal Information</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="form-group"><label>Full Name *</label><input id="kyc-name" type="text" placeholder="As per government ID"/></div>
+          <div class="form-group"><label>Date of Birth *</label><input id="kyc-dob" type="date"/></div>
+          <div class="form-group"><label>Gender *</label><select id="kyc-gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+          <div class="form-group"><label>Nationality *</label><input id="kyc-nationality" type="text" placeholder="e.g. Indian"/></div>
+          <div class="form-group"><label>Phone *</label><input id="kyc-phone" type="tel" placeholder="+91 XXXXXXXXXX"/></div>
+          <div class="form-group"><label>Email *</label><input id="kyc-email" type="email" placeholder="your@email.com"/></div>
+        </div>
+        <div class="form-group"><label>Residential Address *</label><input id="kyc-addr" type="text" placeholder="House No., Street, Area"/></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+          <div class="form-group"><label>City *</label><input id="kyc-city" type="text" placeholder="City"/></div>
+          <div class="form-group"><label>State *</label><input id="kyc-state" type="text" placeholder="State"/></div>
+          <div class="form-group"><label>PIN *</label><input id="kyc-pin" type="text" placeholder="000000"/></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="form-group"><label>Occupation *</label><select id="kyc-occ"><option value="">Select</option><option>Employed</option><option>Self-Employed</option><option>Business Owner</option><option>Student</option><option>Retired</option><option>Other</option></select></div>
+          <div class="form-group"><label>Trading Experience *</label><select id="kyc-exp"><option value="">Select</option><option>Beginner (&lt;1 year)</option><option>Intermediate (1–3 years)</option><option>Advanced (3–5 years)</option><option>Professional (5+ years)</option></select></div>
+        </div>
+        <div class="form-group"><label>Primary Market Interest *</label><select id="kyc-market"><option value="">Select</option><option>Indian Market (Nifty/BankNifty/MCX)</option><option>Global Binary Options &amp; Forex</option><option>Both Indian &amp; Global Markets</option></select></div>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px"><button onclick="goStep(2)" class="form-submit" style="width:auto;padding:10px 28px">Next →</button></div>
+      </div>
+      <!-- Step 2 -->
+      <div id="kyc-page-2" style="display:none">
+        <h4 style="margin-bottom:6px">Document Upload</h4>
+        <p style="font-size:.77rem;color:var(--muted);margin-bottom:18px">Clear scans or photos. JPG/PNG/PDF · Max 5MB each.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div class="form-group"><label>ID Type *</label><select id="kyc-id-type"><option value="">Select</option><option>Aadhaar Card</option><option>PAN Card</option><option>Passport</option><option>Voter ID</option><option>Driving License</option></select></div>
+            <div class="form-group"><label>ID Number *</label><input id="kyc-id-num" type="text" placeholder="Enter ID number"/></div>
+            <div class="form-group"><label>ID Front *</label>
+              <div class="upload-box" id="ub-idfront" onclick="triggerUpload('id-front')"><div class="upload-inner"><span style="font-size:1.6rem">🪪</span><p>Upload ID Front</p></div></div>
+              <input type="file" id="id-front" accept=".jpg,.jpeg,.png,.pdf" style="display:none" onchange="previewFile(this,'ub-idfront')"/>
+            </div>
+            <div class="form-group"><label>ID Back</label>
+              <div class="upload-box" id="ub-idback" onclick="triggerUpload('id-back')"><div class="upload-inner"><span style="font-size:1.6rem">🪪</span><p>Upload ID Back</p></div></div>
+              <input type="file" id="id-back" accept=".jpg,.jpeg,.png,.pdf" style="display:none" onchange="previewFile(this,'ub-idback')"/>
+            </div>
+          </div>
+          <div>
+            <div class="form-group"><label>Selfie with ID *</label>
+              <div class="upload-box" id="ub-selfie" onclick="triggerUpload('selfie')"><div class="upload-inner"><span style="font-size:1.6rem">🤳</span><p>Selfie holding your ID</p></div></div>
+              <input type="file" id="selfie" accept=".jpg,.jpeg,.png" style="display:none" onchange="previewFile(this,'ub-selfie')"/>
+            </div>
+            <div class="form-group"><label>Address Proof (optional)</label>
+              <div class="upload-box" id="ub-addr" onclick="triggerUpload('addr-proof')"><div class="upload-inner"><span style="font-size:1.6rem">🏠</span><p>Utility bill / Bank statement</p></div></div>
+              <input type="file" id="addr-proof" accept=".jpg,.jpeg,.png,.pdf" style="display:none" onchange="previewFile(this,'ub-addr')"/>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:18px">
+          <button onclick="goStep(1)" class="btn-ghost" style="padding:10px 24px;font-size:.84rem">← Back</button>
+          <button onclick="goStep(3)" class="form-submit" style="width:auto;padding:10px 28px">Review &amp; Submit →</button>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div id="kyc-page-3" style="display:none">
+        <h4 style="margin-bottom:14px">Review &amp; Confirm</h4>
+        <div id="kyc-summary" style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:.81rem;line-height:2;margin-bottom:16px"></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;background:rgba(255,60,60,.06);border:1px solid rgba(255,80,80,.2);border-radius:12px;padding:13px">
+          <input type="checkbox" id="kyc-consent" style="margin-top:3px;width:15px;height:15px;cursor:pointer"/>
+          <label for="kyc-consent" style="font-size:.77rem;color:rgba(255,200,200,.8);cursor:pointer;line-height:1.6">I confirm all information and documents are genuine. I consent to SHI-SHA Tech processing my KYC data for verification only. I understand trading involves substantial risk and no profits are guaranteed. I acknowledge SHI-SHA Tech is NOT SEBI-registered.</label>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button onclick="goStep(2)" class="btn-ghost" style="padding:10px 24px;font-size:.84rem">← Back</button>
+          <button onclick="submitKYC()" class="form-submit" style="flex:1;min-width:180px">📧 Submit KYC via Email</button>
+        </div>
+      </div>
+      <!-- Success -->
+      <div id="kyc-success" style="display:none;text-align:center;padding:28px 0">
+        <div style="font-size:3.5rem;margin-bottom:14px">✅</div>
+        <h3 style="color:var(--neon3);font-size:1.3rem;margin-bottom:10px">KYC Submitted!</h3>
+        <p style="color:var(--muted);font-size:.86rem;line-height:1.7;max-width:380px;margin:0 auto 20px">Your KYC has been opened in your email app. Please send the email. Our team verifies within <strong style="color:var(--text)">24–48 hours</strong>.</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <a href="https://wa.me/918629924099" target="_blank" class="wa-btn" style="font-size:.82rem">Also via WhatsApp</a>
+          <button onclick="closeKYC()" class="btn-ghost" style="padding:10px 22px;font-size:.82rem">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// MODALS
+function openModal(id){document.getElementById('modal-'+id).classList.add('active');document.body.style.overflow='hidden'}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('active');document.body.style.overflow=''}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){if(e.target===this){this.classList.remove('active');document.body.style.overflow=''}}));
+
+// TABS
+function showTab(cat,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#toolsGrid .tool-card,#toolsGrid .strategy-sep').forEach(el=>{
+    if(cat==='all') el.style.display='';
+    else if(cat==='ai') el.style.display=(el.dataset.cat==='ai')?'':'none';
+    else if(cat==='strategy') el.style.display=(el.dataset.cat==='strategy')?'':'none';
+    else if(cat==='india') el.style.display=(el.dataset.cat==='india')?'':'none';
+  });
+}
+
+// HERO CANVAS
+const canvas=document.getElementById('tradingCanvas'),ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;pts=[]}
+resize();window.addEventListener('resize',resize);
+function initPts(){let v=H*.6;for(let i=0;i<120;i++){v+=((Math.random()-.48)*18);v=Math.max(H*.15,Math.min(H*.85,v));pts.push(v)}}
+initPts();let off=0;
+function drawHero(){
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='rgba(0,240,255,0.04)';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for(let y=0;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+  let cw=18,gap=6,n=Math.floor(W/(cw+gap));
+  for(let i=0;i<n;i++){
+    let x=i*(cw+gap),pi=Math.floor((i+off)%pts.length);
+    let o=pts[pi],c=pts[(pi+1)%pts.length];
+    let hi=Math.min(o,c)-(Math.random()*15),lo=Math.max(o,c)+(Math.random()*15);
+    ctx.strokeStyle=c<o?'rgba(0,255,136,0.6)':'rgba(255,68,100,0.6)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x+cw/2,hi);ctx.lineTo(x+cw/2,lo);ctx.stroke();
+    ctx.fillStyle=c<o?'rgba(0,255,136,0.4)':'rgba(255,68,100,0.4)';
+    ctx.fillRect(x,Math.min(o,c),cw,Math.abs(o-c)||2);
+  }
+  ctx.beginPath();ctx.strokeStyle='rgba(0,240,255,0.7)';ctx.lineWidth=2;ctx.shadowBlur=12;ctx.shadowColor=ctx.strokeStyle;
+  pts.forEach((y,i)=>{let x=(i/pts.length)*W*1.1-off;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
+  ctx.stroke();ctx.shadowBlur=0;off+=.5;if(off>pts.length)off=0;
+  requestAnimationFrame(drawHero);
+}
+drawHero();
+
+// ABOUT CHART
+const ac=document.getElementById('aboutChart');
+if(ac){const ax=ac.getContext('2d');ac.width=400;ac.height=200;
+let ap=[100,108,95,128,118,142,132,158,150,172,165,182,175,198,192];
+ax.fillStyle='rgba(0,8,20,0.8)';ax.fillRect(0,0,400,200);
+let grd=ax.createLinearGradient(0,0,0,200);grd.addColorStop(0,'rgba(0,240,255,0.4)');grd.addColorStop(1,'rgba(0,240,255,0)');
+ax.beginPath();ax.moveTo(0,200);
+ap.forEach((v,i)=>{ax.lineTo((i/(ap.length-1))*400,200-v*.88)});
+ax.lineTo(400,200);ax.closePath();ax.fillStyle=grd;ax.fill();
+ax.beginPath();ax.strokeStyle='#00f0ff';ax.lineWidth=2.5;ax.shadowBlur=15;ax.shadowColor='#00f0ff';
+ap.forEach((v,i)=>{let x=(i/(ap.length-1))*400;i===0?ax.moveTo(x,200-v*.88):ax.lineTo(x,200-v*.88)});
+ax.stroke();ax.shadowBlur=0;}
+
+// LIVE CANVAS
+const lc=document.getElementById('liveCanvas'),lx=lc.getContext('2d');
+let lW,lH;
+function lResize(){lW=lc.width=lc.offsetWidth;lH=lc.height=lc.offsetHeight}
+lResize();window.addEventListener('resize',lResize);
+let lpts=[],lv=200;for(let i=0;i<200;i++){lv+=((Math.random()-.48)*12);lv=Math.max(20,Math.min(200,lv));lpts.push(lv)}
+let loff=0;
+function drawLive(){lx.clearRect(0,0,lW,lH);lx.beginPath();lx.strokeStyle='rgba(0,255,136,0.6)';lx.lineWidth=2;lx.shadowBlur=10;lx.shadowColor='#00ff88';lpts.forEach((y,i)=>{let x=(i/lpts.length)*lW*1.05-loff;i===0?lx.moveTo(x,y):lx.lineTo(x,y)});lx.stroke();lx.shadowBlur=0;loff+=.4;if(loff>lpts.length)loff=0;requestAnimationFrame(drawLive);}
+drawLive();
+
+// SIGNAL FEED
+const assets=['EUR/USD','BTC/USD','GOLD','GBP/JPY','ETH/USD','USD/JPY','NIFTY 50','BANKNIFTY','MCX CRUDE','MCX GOLD','OTC/CHF','NIFTY FUT'];
+const tfs=['1 Min','3 Min','5 Min','15 Min'];
+const feed=document.getElementById('signalFeed');
+function newSignal(){
+  const a=assets[Math.floor(Math.random()*assets.length)];
+  const buy=Math.random()>.45,acc=Math.floor(86+Math.random()*10);
+  const tf=tfs[Math.floor(Math.random()*4)];
+  const now=new Date(),t=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+':'+now.getSeconds().toString().padStart(2,'0');
+  const isIndia=a.includes('NIFTY')||a.includes('BANKNIFTY')||a.includes('MCX');
+  const row=document.createElement('div');row.className='feed-row';
+  row.innerHTML=`<span class="signal-asset" style="${isIndia?'color:var(--india)':''}">${a}</span><span class="${buy?'signal-buy':'signal-sell'}">${buy?'▲ BUY':'▼ SELL'}</span><span class="signal-time">${t}</span><span class="signal-acc">${acc}%</span><span style="color:var(--muted);text-align:right;font-size:.76rem">${tf}</span>`;
+  feed.insertBefore(row,feed.firstChild);if(feed.children.length>8)feed.removeChild(feed.lastChild);
+}
+for(let i=0;i<8;i++)newSignal();setInterval(newSignal,2000);
+
+function handleSubmit(){alert('✅ Message sent! SHI-SHA Tech will contact you shortly. For Indian market queries, our team will respond during IST business hours.');}
+
+// KYC
+function openKYC(){document.getElementById('modal-kyc').classList.add('active');document.body.style.overflow='hidden';goStep(1)}
+function closeKYC(){document.getElementById('modal-kyc').classList.remove('active');document.body.style.overflow=''}
+function goStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('kyc-page-'+i).style.display=i===n?'block':'none';
+    const ind=document.getElementById('step-ind-'+i);
+    if(i===n){ind.style.background='linear-gradient(135deg,rgba(0,240,255,.15),rgba(123,47,255,.1))';ind.style.color='var(--neon)'}
+    else{ind.style.background='var(--glass2)';ind.style.color='var(--muted)'}
+  });
+  document.getElementById('kyc-success').style.display='none';
+  if(n===3)buildSummary();
+}
+function triggerUpload(id){document.getElementById(id).click()}
+function previewFile(inp,boxId){const box=document.getElementById(boxId);if(inp.files&&inp.files[0]){const f=inp.files[0];box.classList.add('uploaded');box.querySelector('.upload-inner').innerHTML=`<span style="font-size:1.4rem">✅</span><p style="color:var(--neon3);font-weight:700">${f.name}</p><p style="font-size:.7rem">${(f.size/1024).toFixed(0)} KB</p>`;}}
+function buildSummary(){
+  const fields=[['Full Name',document.getElementById('kyc-name').value||'—'],['Date of Birth',document.getElementById('kyc-dob').value||'—'],['Gender',document.getElementById('kyc-gender').value||'—'],['Nationality',document.getElementById('kyc-nationality').value||'—'],['Phone',document.getElementById('kyc-phone').value||'—'],['Email',document.getElementById('kyc-email').value||'—'],['Address',document.getElementById('kyc-addr').value||'—'],['City/State/PIN',[document.getElementById('kyc-city').value,document.getElementById('kyc-state').value,document.getElementById('kyc-pin').value].filter(Boolean).join(' / ')||'—'],['Occupation',document.getElementById('kyc-occ').value||'—'],['Experience',document.getElementById('kyc-exp').value||'—'],['Market Interest',document.getElementById('kyc-market').value||'—'],['ID Type',document.getElementById('kyc-id-type').value||'—'],['ID Number',document.getElementById('kyc-id-num').value||'—'],['ID Front',document.getElementById('id-front').files[0]?.name||'Not uploaded'],['ID Back',document.getElementById('id-back').files[0]?.name||'Not uploaded'],['Selfie',document.getElementById('selfie').files[0]?.name||'Not uploaded']];
+  document.getElementById('kyc-summary').innerHTML=fields.map(([k,v])=>`<div style="display:flex;gap:12px;border-bottom:1px solid rgba(255,255,255,.05);padding:2px 0"><span style="color:var(--muted);min-width:150px;flex-shrink:0;font-size:.79rem">${k}:</span><span style="color:var(--text);font-weight:600;font-size:.79rem">${v}</span></div>`).join('');
+}
+function submitKYC(){
+  if(!document.getElementById('kyc-consent').checked){alert('⚠ Please accept the consent declaration before submitting.');return}
+  const n=document.getElementById('kyc-name').value,ph=document.getElementById('kyc-phone').value,em=document.getElementById('kyc-email').value;
+  if(!n||!ph||!em){alert('⚠ Please fill all required fields in Step 1.');goStep(1);return}
+  const idFront=document.getElementById('id-front').files[0],selfie=document.getElementById('selfie').files[0];
+  if(!idFront||!selfie){alert('⚠ Please upload ID Front and Selfie in Step 2.');goStep(2);return}
+  const body=`KYC SUBMISSION — SHI-SHA TECH (INDIA)\n${'='.repeat(35)}\nFull Name     : ${n}\nDOB           : ${document.getElementById('kyc-dob').value}\nGender        : ${document.getElementById('kyc-gender').value}\nNationality   : ${document.getElementById('kyc-nationality').value}\nPhone         : ${ph}\nEmail         : ${em}\nAddress       : ${document.getElementById('kyc-addr').value}, ${document.getElementById('kyc-city').value}, ${document.getElementById('kyc-state').value} - ${document.getElementById('kyc-pin').value}\nOccupation    : ${document.getElementById('kyc-occ').value}\nExperience    : ${document.getElementById('kyc-exp').value}\nMarket        : ${document.getElementById('kyc-market').value}\nID Type       : ${document.getElementById('kyc-id-type').value}\nID Number     : ${document.getElementById('kyc-id-num').value}\nID Front      : ${idFront?.name||'Not uploaded'}\nID Back       : ${document.getElementById('id-back').files[0]?.name||'Not uploaded'}\nSelfie        : ${selfie?.name||'Not uploaded'}\nAddress Proof : ${document.getElementById('addr-proof').files[0]?.name||'Not uploaded'}\n${'='.repeat(35)}\nNOTE: Please attach uploaded files to this email before sending.\nSubmitted via SHI-SHA Tech KYC Portal`;
+  window.location.href=`mailto:shisha.techbinary01@gmail.com?subject=KYC%20Submission%20%E2%80%94%20${encodeURIComponent(n)}&body=${encodeURIComponent(body)}`;
+  setTimeout(()=>{document.getElementById('kyc-page-3').style.display='none';document.getElementById('kyc-success').style.display='block';[1,2,3].forEach(i=>{const ind=document.getElementById('step-ind-'+i);ind.style.background='linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,200,100,.1))';ind.style.color='var(--neon3)'})},900);
+}
+</script>
+</body>
+</html>
